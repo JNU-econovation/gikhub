@@ -7,6 +7,7 @@ import lombok.*;
 @Builder
 @Getter
 @AllArgsConstructor
+@Table(name = "users")
 @NoArgsConstructor
 public class User {
 

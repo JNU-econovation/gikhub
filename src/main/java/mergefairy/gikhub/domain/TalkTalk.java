@@ -14,7 +14,7 @@ public class TalkTalk extends BaseTimeEntity{
     @Column(name = "talktalk_id")
     private Long id;
 
-    @Column(nullable = false, length = 200)
+    @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
