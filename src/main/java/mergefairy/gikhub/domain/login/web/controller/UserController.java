@@ -1,31 +1,58 @@
 package mergefairy.gikhub.domain.login.web.controller;
 
 import lombok.RequiredArgsConstructor;
-import mergefairy.gikhub.domain.User;
+import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.service.UserCreateDto;
 import mergefairy.gikhub.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
+@Slf4j
 public class UserController {
     private final UserServiceImpl userServiceImpl;
 
-    /*회원가입 폼
-    @GetMapping("/add")
-    public String createUserForm(@ModelAttribute("User") User user)
-    */
+    @GetMapping("/validation/join")
+    public String joinForm(UserCreateDto userCreateDto) {
 
+        // 여기서 UserCreateDto를 받아줘야 회원가입 실패시 그 입력값이 그대로 유지
+        // 즉, 기존에 처음 페이지에 들어갈 때는 userDTO가 parameter로 들어오지 않으니 무시
+        // 회원가입 실패시, UserCreateDto를 받은 Get요청이 이루어지면서 model을 통해 넘어온 값이 parameter 로 받아지게 된다.
+        return "/user/joinForm"; //회원가입창
+    }
 
     //회원가입
-    @PostMapping("/add")
-    public ResponseEntity<User> createUser(UserCreateDto userCreateDto){
-        User user = userServiceImpl.createUser(userCreateDto);
-        return new ResponseEntity<>(user, HttpStatus.CREATED);
+    @PostMapping("/validation/join")
+    public String joinUser(@Validated UserCreateDto userCreateDto, Errors errors, Model model) {
+        /* post요청시 넘어온 user 입력값에서 Validation에 걸리는 경우 */
+        if (errors.hasErrors()) {
+            /* 회원가입 실패시 입력 데이터 유지 */
+            model.addAttribute("userCreateDto", userCreateDto);
+            /* 회원가입 실패시 message 값들을 모델에 매핑해서 View로 전달 */
+            Map<String, String> validateResult = userServiceImpl.validateHandler(errors);
+            // map.keySet() -> 모든 key값을 갖고온다.
+            // 그 갖고온 키로 반복문을 통해 키와 에러 메세지로 매핑
+            for (String key : validateResult.keySet()) {
+                // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
+                model.addAttribute(key, validateResult.get(key));
+            }
+            return "join";
+        }
+
+        userServiceImpl.createUser(userCreateDto);
+        log.info("join 성공");
+
+        return "redirect:/api/login";
     }
+
+    //이메일 중복 확인
+    @GetMapping("/email/{email}/")
 
     /*
     get
@@ -37,8 +64,10 @@ public class UserController {
     회원 수정
      */
 
-    /*
-    Delete
-    회원 삭제
-     */
+    //회원 삭제(탈퇴)
+    @DeleteMapping("/delete")
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteUser(@Validated @RequestBody String email){
+        userServiceImpl.deleteUser(email);
+    }
 }
