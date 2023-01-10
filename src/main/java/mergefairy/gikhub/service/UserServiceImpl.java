@@ -36,4 +36,18 @@ public class UserServiceImpl implements UserService {
         }
         return validatorResult;
     }
+
+    public Boolean checkEmailDuplicate(String email) {
+        if(userRepository.existsByEmail(email)){
+            return true; //중복되는 경우 true
+        }
+        return false;
+    }
+
+    public Boolean checkNickNameDuplicate(String nickName) {
+        if(userRepository.existsByNickName(nickName)){
+            return true; //중복되는 경우 true
+        }
+        return false;
+    }
 }

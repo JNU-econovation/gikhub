@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.service.UserCreateDto;
 import mergefairy.gikhub.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.validation.annotation.Validated;
@@ -52,7 +53,16 @@ public class UserController {
     }
 
     //이메일 중복 확인
-    @GetMapping("/email/{email}/")
+    @GetMapping("/emailCheck")
+    public ResponseEntity<Boolean> checkEmailDuplicacte(@RequestBody String email){
+        return ResponseEntity.ok(userServiceImpl.checkEmailDuplicate(email));
+    }
+
+    //닉네임 중복 확인
+    @GetMapping("/nickNameCheck")
+    public ResponseEntity<Boolean> checkNickNameDuplicacte(@RequestBody String nickName){
+        return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
+    }
 
     /*
     get
