@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     public User createUser(UserCreateDto userCreateDto);
-    public void deleteUser(String accountId);
+    public void deleteUser(String email);
 }

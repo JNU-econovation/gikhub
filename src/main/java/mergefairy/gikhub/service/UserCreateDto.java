@@ -14,7 +14,6 @@ public class UserCreateDto {
 
     public User toEntity(){
         return User.builder()
-                .accountId(this.accountId)
                 .email(this.email)
                 .password(this.password)
                 .phoneNo(this.phoneNo)

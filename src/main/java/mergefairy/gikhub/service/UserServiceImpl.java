@@ -15,8 +15,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(userCreateDto.toEntity());
     };
 
-    public void deleteUser(String accountId){
-        User user = userRepository.findByAccountId(accountId)
+    public void deleteUser(String email){
+        User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("해당하는 회원이 없습니다."));
         userRepository.delete(user);
     }

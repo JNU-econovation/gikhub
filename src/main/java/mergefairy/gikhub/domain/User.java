@@ -5,6 +5,7 @@ import lombok.*;
 
 @Entity
 @Builder
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -14,8 +15,9 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @Column(nullable = false, length = 30)
-    private String accountId; //아이디
+//이메일로 로그인 및 중복 계정 확인
+//    @Column(nullable = false, length = 30)
+//    private String accountId; //계정 아이디
 
     @Column(nullable = false, length = 50)
     private String email;
@@ -24,5 +26,5 @@ public class User {
     private String password;
 
     private String phoneNo;
-    private String nickName;
+    private String nickName; //닉네임
 }

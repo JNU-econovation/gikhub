@@ -1,16 +1,15 @@
-package mergefairy.gikhub.web.controller;
+package mergefairy.gikhub.domain.login.web.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.domain.User;
+import mergefairy.gikhub.domain.login.web.SessionConst;
 import mergefairy.gikhub.repository.UserRepository;
-import mergefairy.gikhub.web.session.SessionManager;
+import mergefairy.gikhub.domain.login.web.session.SessionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 
 @Slf4j
 @Controller
@@ -26,18 +25,29 @@ public class HomeController {
 
     //로그인 하지 않은 사용자도 홈에 접근할 수 있기 때문에 required = false 를 사용
     @GetMapping("/")
-    public String homeLogin(HttpServletRequest request, Model model){
+    public String homeLogin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, Model model){
 
-        //세션 관리자에 저장된 회원 정보 조회
-        //null이면 쿠키나 세션이 없는 것 -> 로그인 X
-        User user = (User) sessionManager.getSession(request);
-        if(user == null) return "home";
+        //세션이 없을때
+        if(loginUser == null) return "home";
 
-        //로그인
-        if(user == null) return "home";
-
-        //로그인
-        model.addAttribute("user", user);
-        return "loginUser";
+        //세션이 유지되면 로그인홈으로
+        model.addAttribute("user", loginUser);
+        return "loginHome";
     }
 }
+
+
+//    @Operation(summary = "회원 탈퇴 요청", description = "회원 정보가 삭제됩니다.", tags = { "Member Controller" })
+//    @ApiResponses({
+//            @ApiResponse(responseCode = "200", description = "OK",
+//                    content = @Content(schema = @Schema(implementation = DeleteMemberResponse.class))),
+//            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+//            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+//    })
+//    @DeleteMapping("/v1/member/{id}")
+//    ResponseEntity<DeleteMemberResponse> deleteMember(
+//            @Parameter(description = "회원 ID", required = true, example = "1") @PathVariable("id") Long id) {
+//        // 생략..
+//    }
+//}

@@ -1,4 +1,4 @@
-package mergefairy.gikhub.web.session;
+package mergefairy.gikhub.domain.login.web.session;
 
 import mergefairy.gikhub.domain.User;
 import org.junit.Test;

@@ -1,4 +1,4 @@
-package mergefairy.gikhub.web.controller;
+package mergefairy.gikhub.domain.login.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import mergefairy.gikhub.domain.User;
