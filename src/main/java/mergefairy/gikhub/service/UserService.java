@@ -2,6 +2,7 @@ package mergefairy.gikhub.service;
 
 
 import mergefairy.gikhub.domain.User;
+import mergefairy.gikhub.service.Dto.UserCreateDto;
 import org.springframework.stereotype.Service;
 
 @Service

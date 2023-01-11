@@ -1,4 +1,4 @@
-package mergefairy.gikhub.service;
+package mergefairy.gikhub.service.Dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

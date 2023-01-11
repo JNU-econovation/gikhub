@@ -23,6 +23,10 @@ public class User {
     @Column(nullable = false, length = 50)
     private String email;
 
+    //실명
+    @Column(nullable = false, length = 10)
+    private String name;
+
     @Column(nullable = false, length = 30)
     private String password;
 

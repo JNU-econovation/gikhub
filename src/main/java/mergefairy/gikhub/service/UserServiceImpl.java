@@ -3,6 +3,8 @@ package mergefairy.gikhub.service;
 import lombok.RequiredArgsConstructor;
 import mergefairy.gikhub.domain.User;
 import mergefairy.gikhub.repository.UserRepository;
+import mergefairy.gikhub.service.Dto.UserCreateDto;
+import mergefairy.gikhub.service.Dto.UserInfoDto;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
@@ -49,5 +51,11 @@ public class UserServiceImpl implements UserService {
             return true; //중복되는 경우 true
         }
         return false;
+    }
+
+
+    public UserInfoDto getMyInfo(String nickName){
+        User findUser = userRepository.findByNickName(nickName).get();
+        return new UserInfoDto(findUser);
     }
 }

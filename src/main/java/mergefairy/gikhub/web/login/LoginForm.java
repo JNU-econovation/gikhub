@@ -1,4 +1,4 @@
-package mergefairy.gikhub.domain.login;
+package mergefairy.gikhub.web.login;
 
 import lombok.Data;
 import lombok.Getter;
