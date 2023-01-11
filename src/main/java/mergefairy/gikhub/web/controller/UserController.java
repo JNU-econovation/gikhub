@@ -79,7 +79,7 @@ public class UserController {
      */
 
     //회원 삭제(탈퇴)
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{nickName}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@Validated @RequestBody String email){
         userServiceImpl.deleteUser(email);
