@@ -1,11 +1,11 @@
-package mergefairy.gikhub.domain.login.web.controller;
+package mergefairy.gikhub.web.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.domain.User;
-import mergefairy.gikhub.domain.login.web.SessionConst;
+import mergefairy.gikhub.web.session.SessionConst;
 import mergefairy.gikhub.repository.UserRepository;
-import mergefairy.gikhub.domain.login.web.session.SessionManager;
+import mergefairy.gikhub.web.session.SessionManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

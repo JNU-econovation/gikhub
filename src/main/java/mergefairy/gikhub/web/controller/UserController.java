@@ -1,8 +1,10 @@
-package mergefairy.gikhub.domain.login.web.controller;
+package mergefairy.gikhub.web.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mergefairy.gikhub.service.UserCreateDto;
+import mergefairy.gikhub.service.Dto.UserCreateDto;
+import mergefairy.gikhub.service.Dto.UserInfoDto;
 import mergefairy.gikhub.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -64,10 +66,12 @@ public class UserController {
         return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
     }
 
-    /*
-    get
-    회원 조회
-     */
+    //내정보 보기
+    @GetMapping("/{nikcName}")
+    public ResponseEntity getMyInfo(@Valid @PathVariable("nickName") String nickName) throws Exception{
+        UserInfoDto userInfoDto = userServiceImpl.getMyInfo(nickName);
+        return new ResponseEntity(userInfoDto,HttpStatus.OK);
+    }
 
     /*
     pacth
@@ -75,7 +79,7 @@ public class UserController {
      */
 
     //회원 삭제(탈퇴)
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{nickName}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@Validated @RequestBody String email){
         userServiceImpl.deleteUser(email);

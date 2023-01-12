@@ -1,15 +1,16 @@
 package mergefairy.gikhub.domain;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Entity
+@Builder
 @RequiredArgsConstructor
 public class TalkTalk extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     @Id
     @Column(name = "talktalk_id")
     private Long id;
@@ -20,6 +21,11 @@ public class TalkTalk extends BaseTimeEntity{
     @Column(nullable = false)
     private String content;
 
+    //글번호
+    @Column(nullable = false)
+    private String talkTalkNo;
+
+    //작성자
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
