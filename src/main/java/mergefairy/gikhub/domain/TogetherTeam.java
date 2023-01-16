@@ -11,9 +11,9 @@ public class TogetherTeam {
     @Column(name = "team_id")
     private Long id;
 
-    @Column(nullable = false, name = "room_type")
-    private boolean roomType;
-    //방 타입으로 0이면 같이 사요, 1이면 같이 먹어요
+    @Enumerated(EnumType.STRING)
+    @Column(name = "room_type")
+    private RoomType roomType;
 
     private String storeName;
     private LocalDateTime teamDeadLine;
