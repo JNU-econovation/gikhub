@@ -18,7 +18,6 @@ public class TalkTalkCreateDto {
 
     private User user;
 
-    //private List<Comment> comments;
 
     public TalkTalk toEntity(){
         return TalkTalk.builder()
