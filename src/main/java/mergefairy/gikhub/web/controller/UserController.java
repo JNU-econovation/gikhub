@@ -59,14 +59,14 @@ public class UserController {
 
     //회원가입 시 이메일 중복 확인
     //중복되는 경우 true
-    @GetMapping("/{emailCheck}/exists")
+    @GetMapping("/{email}/exists")
     public ResponseEntity<Boolean> checkEmailDuplicacte(@PathVariable String email){
         log.info(email);
         return ResponseEntity.ok(userServiceImpl.checkEmailDuplicate(email));
     }
 
     //회원가입 시 닉네임 중복 확인
-    @GetMapping("/{nickNameCheck}/exists")
+    @GetMapping("/{nickName}/exists")
     public ResponseEntity<Boolean> checkNickNameDuplicacte(@PathVariable String nickName){
         return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
     }
@@ -88,7 +88,7 @@ public class UserController {
     //회원 삭제(탈퇴)
     @DeleteMapping("/{nickName}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@Validated @RequestBody String email){
-        userServiceImpl.deleteUser(email);
+    public void deleteUser(@Validated @PathVariable String nickName){
+        userServiceImpl.deleteUser(nickName);
     }
 }
