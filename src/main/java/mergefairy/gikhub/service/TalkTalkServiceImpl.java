@@ -29,9 +29,9 @@ public class TalkTalkServiceImpl{
     }
 
     //게시글 목록 조회
-    //최신순
-    public Slice<TalkTalkGetDto> getTalkTalksSortedByCreateAt(int pageNumber){
-        Pageable pageable = PageRequest.of(pageNumber, 7, Sort.by(Sort.Direction.DESC, "createdDate"));
+    //정렬순 : createdDate, commentCount
+    public Slice<TalkTalkGetDto> getTalkTalksSorted(int pageNumber, String sortType){
+        Pageable pageable = PageRequest.of(pageNumber, 7, Sort.by(Sort.Direction.DESC, sortType));
         Slice<TalkTalk> createdSlice = talkTalkRepository.findAllByOrderByCreatedDateDesc(pageable);
         List<TalkTalkGetDto> createDtoList = createdSlice.getContent()
                 .stream()
@@ -40,16 +40,27 @@ public class TalkTalkServiceImpl{
         return new SliceImpl<>(createDtoList, pageable, createdSlice.hasNext());
     }
 
-    //댓글순
-    public Slice<TalkTalkGetDto> getTalkTalksSortedByCommentCount(int pageNumber){
-        Pageable pageable = PageRequest.of(pageNumber, 7, Sort.by(Sort.Direction.DESC, "commentCount"));
-        Slice<TalkTalk> talkTalkSlice= talkTalkRepository.findAllByOrderByCommentCountDesc(pageable);
-        List<TalkTalkGetDto> talkTalkGetDtoList = talkTalkSlice.getContent()
-                .stream()
-                .map(talkTalk -> convertToDto(talkTalk))
-                .collect(Collectors.toList());
-        return new SliceImpl<>(talkTalkGetDtoList, pageable, talkTalkSlice.hasNext());
-    }
+//    //최신순
+//    public Slice<TalkTalkGetDto> getTalkTalksSortedByCreateAt(int pageNumber){
+//        Pageable pageable = PageRequest.of(pageNumber, 7, Sort.by(Sort.Direction.DESC, "createdDate"));
+//        Slice<TalkTalk> createdSlice = talkTalkRepository.findAllByOrderByCreatedDateDesc(pageable);
+//        List<TalkTalkGetDto> createDtoList = createdSlice.getContent()
+//                .stream()
+//                .map(talkTalk -> convertToDto(talkTalk))
+//                .collect(Collectors.toList());
+//        return new SliceImpl<>(createDtoList, pageable, createdSlice.hasNext());
+//    }
+//
+//    //댓글순
+//    public Slice<TalkTalkGetDto> getTalkTalksSortedByCommentCount(int pageNumber){
+//        Pageable pageable = PageRequest.of(pageNumber, 7, Sort.by(Sort.Direction.DESC, "commentCount"));
+//        Slice<TalkTalk> talkTalkSlice= talkTalkRepository.findAllByOrderByCommentCountDesc(pageable);
+//        List<TalkTalkGetDto> talkTalkGetDtoList = talkTalkSlice.getContent()
+//                .stream()
+//                .map(talkTalk -> convertToDto(talkTalk))
+//                .collect(Collectors.toList());
+//        return new SliceImpl<>(talkTalkGetDtoList, pageable, talkTalkSlice.hasNext());
+//    }
 
     private TalkTalkGetDto convertToDto(TalkTalk talkTalk){
         return new TalkTalkGetDto(talkTalk.getTitle(), talkTalk.getUser().toString(), talkTalk.getCommentCount());
@@ -63,6 +74,7 @@ public class TalkTalkServiceImpl{
     }
 
     //게시글 삭제
+    @Transactional
     public void deleteTalkTalk(Long talkTalkNo){
         TalkTalk deleteTalkTalk = talkTalkRepository.findByTalkTalkNo(talkTalkNo).orElseThrow(() -> new IllegalArgumentException("해당하는 글이 없습니다."));
         talkTalkRepository.delete(deleteTalkTalk);
