@@ -1,16 +1,14 @@
 package mergefairy.gikhub.service;
 
-import lombok.Builder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mergefairy.gikhub.domain.TalkTalk;
 import mergefairy.gikhub.repository.TalkTalkRepository;
 import mergefairy.gikhub.service.Dto.TalkTalkCreateDto;
 import mergefairy.gikhub.service.Dto.TalkTalkGetDto;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,12 +21,6 @@ public class TalkTalkServiceImpl{
     //게시글 생성
     public TalkTalk createTalkTalk(TalkTalkCreateDto talkTalkDto){
         return talkTalkRepository.save(talkTalkDto.toEntity());
-    }
-
-    //게시글 삭제
-    public void deleteTalkTalk(Long talkTalkNo){
-        TalkTalk deleteTalkTalk = talkTalkRepository.findByTalkTalkNo(talkTalkNo).orElseThrow(() -> new IllegalArgumentException("해당하는 글이 없습니다."));
-        talkTalkRepository.delete(deleteTalkTalk);
     }
 
     //게시글 1개 조회
@@ -59,8 +51,20 @@ public class TalkTalkServiceImpl{
         return new SliceImpl<>(talkTalkGetDtoList, pageable, talkTalkSlice.hasNext());
     }
 
-
     private TalkTalkGetDto convertToDto(TalkTalk talkTalk){
-        return new TalkTalkGetDto(talkTalk.getTitle(), talkTalk.getUser(), talkTalk.getCommentCount());
+        return new TalkTalkGetDto(talkTalk.getTitle(), talkTalk.getUser().toString(), talkTalk.getCommentCount());
+    }
+
+    //게시글 수정
+    @Transactional
+    public void updateTalkTalk(Long talkTalkNo, String title, String content){
+        TalkTalk findTalkTalk = talkTalkRepository.findByTalkTalkNo(talkTalkNo).orElseThrow(()-> new IllegalArgumentException("해당하는 글이 없습니다."));
+        findTalkTalk.update(title, content);
+    }
+
+    //게시글 삭제
+    public void deleteTalkTalk(Long talkTalkNo){
+        TalkTalk deleteTalkTalk = talkTalkRepository.findByTalkTalkNo(talkTalkNo).orElseThrow(() -> new IllegalArgumentException("해당하는 글이 없습니다."));
+        talkTalkRepository.delete(deleteTalkTalk);
     }
 }
