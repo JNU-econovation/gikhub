@@ -18,6 +18,9 @@ public class UserCreateDto {
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
     private String password;
 
+    @NotBlank
+    private String realName;
+
     private String phoneNo;
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9-_]{2,6}$", message = "닉네임은 특수문자를 제외한 2~6자리여야 합니다.")
     private String nickName;
@@ -28,6 +31,7 @@ public class UserCreateDto {
                 .password(this.password)
                 .phoneNo(this.phoneNo)
                 .nickName(this.nickName)
+                .realName(this.realName)
                 .build();
     }
 

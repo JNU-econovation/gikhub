@@ -3,7 +3,9 @@ package mergefairy.gikhub.web.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import mergefairy.gikhub.domain.User;
 import mergefairy.gikhub.service.Dto.UserCreateDto;
+import mergefairy.gikhub.service.Dto.UserEditDto;
 import mergefairy.gikhub.service.Dto.UserInfoDto;
 import mergefairy.gikhub.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -45,43 +47,48 @@ public class UserController {
                 // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
                 model.addAttribute(key, validateResult.get(key));
             }
-            return "join";
+            return "join 실패";
         }
 
         userServiceImpl.createUser(userCreateDto);
         log.info("join 성공");
 
+        //로그인 화면으로 이동
         return "redirect:/api/login";
     }
 
-    //이메일 중복 확인
-    @GetMapping("/emailCheck")
-    public ResponseEntity<Boolean> checkEmailDuplicacte(@RequestBody String email){
+    //회원가입 시 이메일 중복 확인
+    //중복되는 경우 true
+    @GetMapping("/{email}/exists")
+    public ResponseEntity<Boolean> checkEmailDuplicacte(@PathVariable String email){
+        log.info(email);
         return ResponseEntity.ok(userServiceImpl.checkEmailDuplicate(email));
     }
 
-    //닉네임 중복 확인
-    @GetMapping("/nickNameCheck")
-    public ResponseEntity<Boolean> checkNickNameDuplicacte(@RequestBody String nickName){
+    //회원가입 시 닉네임 중복 확인
+    @GetMapping("/{nickName}/exists")
+    public ResponseEntity<Boolean> checkNickNameDuplicacte(@PathVariable String nickName){
         return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
     }
 
-    //내정보 보기
+    //마이페이지의 내정보 보기
     @GetMapping("/{nikcName}")
     public ResponseEntity getMyInfo(@Valid @PathVariable("nickName") String nickName) throws Exception{
         UserInfoDto userInfoDto = userServiceImpl.getMyInfo(nickName);
         return new ResponseEntity(userInfoDto,HttpStatus.OK);
     }
 
-    /*
-    pacth
-    회원 수정
-     */
+    //회원 정보 수정
+    @PutMapping("/{nickName}")
+    public ResponseEntity updateMyInfo(@PathVariable("nickName") String nickName, UserEditDto userEditDto){
+        User updatedUser = userServiceImpl.update(userEditDto, nickName);
+        return new ResponseEntity(updatedUser, HttpStatus.OK);
+    }
 
     //회원 삭제(탈퇴)
     @DeleteMapping("/{nickName}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteUser(@Validated @RequestBody String email){
-        userServiceImpl.deleteUser(email);
+    public void deleteUser(@Validated @PathVariable String nickName){
+        userServiceImpl.deleteUser(nickName);
     }
 }

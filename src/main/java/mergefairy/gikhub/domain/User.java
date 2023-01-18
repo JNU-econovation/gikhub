@@ -25,11 +25,16 @@ public class User {
 
     //실명
     @Column(nullable = false, length = 10)
-    private String name;
+    private String realName;
 
     @Column(nullable = false, length = 30)
     private String password;
 
     private String phoneNo;
     private String nickName; //닉네임
+
+    public void update(String password, String nickName){
+        this.nickName = nickName;
+        this.password = password;
+    }
 }
