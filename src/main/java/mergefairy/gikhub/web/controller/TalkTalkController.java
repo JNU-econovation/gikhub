@@ -26,15 +26,9 @@ import java.util.Map;
 public class TalkTalkController {
     private final TalkTalkServiceImpl talkTalkServiceImpl;
 
-    //게시글 등록 화면
-    @GetMapping("/add")
-    public String openTalkTalkWrite(){
-        return "등록 화면"; //fx
-    }
-
     //게시글 등록
     @PostMapping("/add")
-    public ResponseEntity createTalkTalk(@Validated TalkTalkCreateDto talkTalkDto){
+    public ResponseEntity createTalkTalk(@Validated @RequestBody TalkTalkCreateDto talkTalkDto){
         TalkTalk createdTalkTalk = talkTalkServiceImpl.createTalkTalk(talkTalkDto);
         return new ResponseEntity(createdTalkTalk, HttpStatus.CREATED);
     }
