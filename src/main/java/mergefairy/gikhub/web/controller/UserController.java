@@ -23,18 +23,10 @@ import java.util.Map;
 public class UserController {
     private final UserServiceImpl userServiceImpl;
 
-    @GetMapping("/validation/join")
-    public String joinForm(UserCreateDto userCreateDto) {
-
-        // 여기서 UserCreateDto를 받아줘야 회원가입 실패시 그 입력값이 그대로 유지
-        // 즉, 기존에 처음 페이지에 들어갈 때는 userDTO가 parameter로 들어오지 않으니 무시
-        // 회원가입 실패시, UserCreateDto를 받은 Get요청이 이루어지면서 model을 통해 넘어온 값이 parameter 로 받아지게 된다.
-        return "/user/joinForm"; //회원가입창
-    }
-
     //회원가입
     @PostMapping("/validation/join")
-    public String joinUser(@Validated UserCreateDto userCreateDto, Errors errors, Model model) {
+    public ResponseEntity joinUser(@Validated @RequestBody UserCreateDto userCreateDto, Errors errors, Model model) {
+        System.out.println("사용자 이름" + userCreateDto.getNickName());
         /* post요청시 넘어온 user 입력값에서 Validation에 걸리는 경우 */
         if (errors.hasErrors()) {
             /* 회원가입 실패시 입력 데이터 유지 */
@@ -47,27 +39,28 @@ public class UserController {
                 // ex) model.addAtrribute("valid_id", "아이디는 필수 입력사항 입니다.")
                 model.addAttribute(key, validateResult.get(key));
             }
-            return "join 실패";
+            log.info("join 실패");
+            //
         }
 
-        userServiceImpl.createUser(userCreateDto);
+        User createdUser = userServiceImpl.createUser(userCreateDto);
         log.info("join 성공");
 
-        //로그인 화면으로 이동
-        return "redirect:/api/login";
+        return new ResponseEntity(createdUser, HttpStatus.CREATED);
     }
 
     //회원가입 시 이메일 중복 확인
-    //중복되는 경우 true
-    @GetMapping("/{email}/exists")
+    @GetMapping("/{email}/exists") //  localhost:8080/api/user/{email}/exists
     public ResponseEntity<Boolean> checkEmailDuplicacte(@PathVariable String email){
         log.info(email);
+        //중복되는 경우 true 리턴
         return ResponseEntity.ok(userServiceImpl.checkEmailDuplicate(email));
     }
 
     //회원가입 시 닉네임 중복 확인
     @GetMapping("/{nickName}/exists")
     public ResponseEntity<Boolean> checkNickNameDuplicacte(@PathVariable String nickName){
+        //중복되는 경우 true 리턴
         return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
     }
 
