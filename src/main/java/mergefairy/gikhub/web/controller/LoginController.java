@@ -8,7 +8,8 @@ import mergefairy.gikhub.domain.User;
 import mergefairy.gikhub.web.login.LoginForm;
 import mergefairy.gikhub.web.login.LoginService;
 import mergefairy.gikhub.web.session.SessionConst;
-import mergefairy.gikhub.web.session.SessionManager;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -21,23 +22,14 @@ public class LoginController {
 
     private final LoginService loginService;
 
-    @GetMapping("/login")
-    public String loginForm(@ModelAttribute("loginForm") LoginForm form){
-        return "/login/loginForm"; //로그인 시도 화면 F(x)
-    }
-
     @PostMapping("/login")
-    public String login(@Validated @ModelAttribute LoginForm form, BindingResult bindingResult, HttpServletRequest request) {
-
-        //로그인 에러 있을시 다시 로그인 시도 화면
-        if (bindingResult.hasErrors()) return "/login/loginForm";
+    public ResponseEntity login(@Validated @ModelAttribute LoginForm form, BindingResult bindingResult, HttpServletRequest request) {
 
         User loginUser = loginService.login(form.getEmail(), form.getPassword());
         log.info("login? {}", loginUser);
 
         if (loginUser == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-            return "/login/loginForm";
         }
 
         // 로그인 성공 처리
@@ -48,16 +40,17 @@ public class LoginController {
         // 세션에 회원 정보 보관
         session.setAttribute(SessionConst.LOGIN_USER, loginUser);
 
-        //로그인 성공 시 메인 화면으로 리다이렉트 F(x)
-        return "redirect:/";
+        return new ResponseEntity(loginUser, HttpStatus.OK);
     }
 
+    //로그아웃
     @PostMapping("/logout")
-    public String logout(HttpServletRequest request){
+    public ResponseEntity logout(HttpServletRequest request){
+
         //세션 삭제
         HttpSession session = request.getSession(false);
         if(session != null) session.invalidate();
 
-        return "redirect:/";
+        return new ResponseEntity("로그아웃 성공", HttpStatus.OK);
     }
 }
