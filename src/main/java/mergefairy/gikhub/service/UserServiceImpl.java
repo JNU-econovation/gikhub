@@ -1,9 +1,11 @@
 package mergefairy.gikhub.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import mergefairy.gikhub.domain.User;
 import mergefairy.gikhub.repository.UserRepository;
 import mergefairy.gikhub.service.Dto.UserCreateDto;
+import mergefairy.gikhub.service.Dto.UserEditDto;
 import mergefairy.gikhub.service.Dto.UserInfoDto;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
@@ -15,7 +17,7 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl{
     private final UserRepository userRepository;
 
     public User createUser(UserCreateDto userCreateDto){
@@ -56,6 +58,16 @@ public class UserServiceImpl implements UserService {
 
     public UserInfoDto getMyInfo(String nickName){
         User findUser = userRepository.findByNickName(nickName).get();
+                //.orElseThrow(()-> new IllegalArgumentException("정보를 가져올 수 없습니다."));
         return new UserInfoDto(findUser);
+    }
+
+    @Transactional
+    public User update(UserEditDto userEditDto, String nickName) {
+        User updateUser = userRepository.findByNickName(nickName).orElseThrow(()-> new IllegalArgumentException("수정할 정보가 없습니다."));
+
+        //JPA 의 영속성 컨텍스트 덕분에 entity 객체의 값만 변경하면 자동으로 변경사항 반영
+        updateUser.update(userEditDto.getPassword(), userEditDto.getNickName());
+        return updateUser;
     }
 }
