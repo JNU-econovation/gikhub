@@ -50,22 +50,22 @@ public class UserController {
     }
 
     //회원가입 시 이메일 중복 확인
-    @GetMapping("/{email}/exists") //  localhost:8080/api/user/{email}/exists
-    public ResponseEntity<Boolean> checkEmailDuplicacte(@PathVariable String email){
+    @GetMapping("/email/{email}/exists") //  localhost:8080/api/user/{email}/exists
+    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email){
         log.info(email);
         //중복되는 경우 true 리턴
         return ResponseEntity.ok(userServiceImpl.checkEmailDuplicate(email));
     }
 
     //회원가입 시 닉네임 중복 확인
-    @GetMapping("/{nickName}/exists")
-    public ResponseEntity<Boolean> checkNickNameDuplicacte(@PathVariable String nickName){
+    @GetMapping("/nickName/{nickName}/exists")
+    public ResponseEntity<Boolean> checkNickNameDuplicate(@PathVariable String nickName){
         //중복되는 경우 true 리턴
         return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
     }
 
     //마이페이지의 내정보 보기
-    @GetMapping("/{nikcName}")
+    @GetMapping("/{nickName}")
     public ResponseEntity getMyInfo(@Valid @PathVariable("nickName") String nickName) throws Exception{
         UserInfoDto userInfoDto = userServiceImpl.getMyInfo(nickName);
         return new ResponseEntity(userInfoDto,HttpStatus.OK);
