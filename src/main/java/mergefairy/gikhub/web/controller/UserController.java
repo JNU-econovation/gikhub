@@ -4,9 +4,9 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.domain.User;
-import mergefairy.gikhub.service.Dto.UserCreateDto;
-import mergefairy.gikhub.service.Dto.UserEditDto;
-import mergefairy.gikhub.service.Dto.UserInfoDto;
+import mergefairy.gikhub.service.Dto.UserCreateRequestDto;
+import mergefairy.gikhub.service.Dto.UserEditRequestDto;
+import mergefairy.gikhub.service.Dto.UserResponseDto;
 import mergefairy.gikhub.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ public class UserController {
 
     //회원가입
     @PostMapping("/validation/join")
-    public ResponseEntity joinUser(@Validated @RequestBody UserCreateDto userCreateDto, Errors errors, Model model) {
+    public ResponseEntity joinUser(@Validated UserCreateRequestDto userCreateDto, Errors errors, Model model) {
         System.out.println("사용자 이름" + userCreateDto.getNickName());
         /* post요청시 넘어온 user 입력값에서 Validation에 걸리는 경우 */
         if (errors.hasErrors()) {
@@ -51,29 +51,29 @@ public class UserController {
 
     //회원가입 시 이메일 중복 확인
     @GetMapping("/email/{email}/exists") //  localhost:8080/api/user/{email}/exists
-    public ResponseEntity<Boolean> checkEmailDuplicate(@PathVariable String email){
+    public ResponseEntity checkEmailDuplicate(@PathVariable String email){
         log.info(email);
         //중복되는 경우 true 리턴
-        return ResponseEntity.ok(userServiceImpl.checkEmailDuplicate(email));
+        return new ResponseEntity(userServiceImpl.checkEmailDuplicate(email), HttpStatus.OK);
     }
 
     //회원가입 시 닉네임 중복 확인
     @GetMapping("/nickName/{nickName}/exists")
-    public ResponseEntity<Boolean> checkNickNameDuplicate(@PathVariable String nickName){
+    public ResponseEntity checkNickNameDuplicate(@PathVariable String nickName){
         //중복되는 경우 true 리턴
-        return ResponseEntity.ok(userServiceImpl.checkNickNameDuplicate(nickName));
+        return new ResponseEntity(userServiceImpl.checkNickNameDuplicate(nickName), HttpStatus.OK);
     }
 
     //마이페이지의 내정보 보기
     @GetMapping("/{nickName}")
     public ResponseEntity getMyInfo(@Valid @PathVariable("nickName") String nickName) throws Exception{
-        UserInfoDto userInfoDto = userServiceImpl.getMyInfo(nickName);
+        UserResponseDto userInfoDto = userServiceImpl.getMyInfo(nickName);
         return new ResponseEntity(userInfoDto,HttpStatus.OK);
     }
 
     //회원 정보 수정
     @PutMapping("/{nickName}")
-    public ResponseEntity updateMyInfo(@PathVariable("nickName") String nickName, UserEditDto userEditDto){
+    public ResponseEntity updateMyInfo(@PathVariable("nickName") String nickName, UserEditRequestDto userEditDto){
         User updatedUser = userServiceImpl.update(userEditDto, nickName);
         return new ResponseEntity(updatedUser, HttpStatus.OK);
     }
