@@ -19,12 +19,14 @@ public class CommentCreateDto {
     private TalkTalk talkTalk;
     private User user;
     private LocalDateTime createdDate;
+    private Comment parent;
 
     public Comment toEntity(){
         return Comment.builder()
                 .content(this.getContent())
                 .user(this.getUser())
                 .talkTalk(this.getTalkTalk())
+                .parent(this.getParent())
                 .build();
     }
 }
