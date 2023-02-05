@@ -1,12 +1,10 @@
-package mergefairy.gikhub.web.controller;
+package mergefairy.gikhub.web.session.login;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.domain.User;
-import mergefairy.gikhub.web.login.LoginForm;
-import mergefairy.gikhub.web.login.LoginService;
 import mergefairy.gikhub.web.session.SessionConst;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
