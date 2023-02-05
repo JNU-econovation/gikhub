@@ -16,7 +16,7 @@ import java.util.List;
 public class TalkTalk extends BaseTimeEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    @Column(name = "talktalk_id")
+    @Column(name = "talk_talk_id")
     private Long id;
 
     @Column(nullable = false)
@@ -37,7 +37,7 @@ public class TalkTalk extends BaseTimeEntity{
     //댓글 갯수
     private int commentCount = 0;
 
-    @OneToMany(mappedBy = "talkTalk", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "talkTalk", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("id asc")    // 댓글 정렬
     @JsonIgnoreProperties({"talkTalk"})
     private List<Comment> commentList;
