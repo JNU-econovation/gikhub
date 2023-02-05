@@ -18,10 +18,6 @@ public class HomeController {
     private final UserRepository userRepository;
     private final SessionManager sessionManager;
 
-    //홈 (Fx)
-    public String home() {
-        return "home";
-    }
 
     //로그인 하지 않은 사용자도 홈에 접근할 수 있기 때문에 required = false 를 사용
     @GetMapping("/")
@@ -36,18 +32,3 @@ public class HomeController {
     }
 }
 
-
-//    @Operation(summary = "회원 탈퇴 요청", description = "회원 정보가 삭제됩니다.", tags = { "Member Controller" })
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK",
-//                    content = @Content(schema = @Schema(implementation = DeleteMemberResponse.class))),
-//            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-//            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-//    })
-//    @DeleteMapping("/v1/member/{id}")
-//    ResponseEntity<DeleteMemberResponse> deleteMember(
-//            @Parameter(description = "회원 ID", required = true, example = "1") @PathVariable("id") Long id) {
-//        // 생략..
-//    }
-//}
