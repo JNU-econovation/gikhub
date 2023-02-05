@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class CommentCreateDto {
+public class CommentCreateRequestDto {
 
     @NotBlank(message = "본문은 필수 입력 값입니다.")
     private String content;

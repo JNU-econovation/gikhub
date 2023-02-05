@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Builder
-public class TalkTalkCreateDto {
+public class TalkTalkCreateRequestDto {
 //제목, 내용, 작성자, 작성 시간
     @NotBlank(message = "제목은 필수 입력 값입니다.")
     private String title;
