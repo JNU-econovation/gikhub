@@ -11,8 +11,7 @@ import java.util.Optional;
 public interface TalkTalkRepository extends JpaRepository<TalkTalk, Long> {
     TalkTalk save(TalkTalk talkTalk);
 
-    Optional<TalkTalk> findByTalkTalkNo(Long talkTalkNo);
-    //Page<TalkTalk> findAllByOrderByCommentCountDesc(Pageable pageable);
+    Optional<TalkTalk> findByTalkTalkNo(Long talktalkId);
     Slice<TalkTalk> findAllByOrderByCreatedDateDesc(Pageable pageable);
     Slice<TalkTalk> findAllByOrderByCommentCountDesc(Pageable pageable);
 }
