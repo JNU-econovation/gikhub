@@ -3,28 +3,30 @@ package mergefairy.gikhub.web.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mergefairy.gikhub.domain.User;
+import mergefairy.gikhub.service.Dto.noticeDto;
+import mergefairy.gikhub.service.crawler.Crawler;
 import mergefairy.gikhub.web.session.SessionConst;
-import mergefairy.gikhub.repository.UserRepository;
-import mergefairy.gikhub.web.session.SessionManager;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 
-@Slf4j
-@Controller
-@RequiredArgsConstructor
-public class HomeController {
-    private final UserRepository userRepository;
-    private final SessionManager sessionManager;
+import java.io.IOException;
+import java.util.List;
 
-    //홈 (Fx)
-    public String home() {
-        return "home";
-    }
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/")
+public class HomeController {
+
+
 
     //로그인 하지 않은 사용자도 홈에 접근할 수 있기 때문에 required = false 를 사용
-    @GetMapping("/")
+    @GetMapping("/login")
     public String homeLogin(@SessionAttribute(name = SessionConst.LOGIN_USER, required = false) User loginUser, Model model){
 
         //세션이 없을때
@@ -34,20 +36,12 @@ public class HomeController {
         model.addAttribute("user", loginUser);
         return "loginHome";
     }
+
+    //공지사항
+    @GetMapping("/notice")
+    public ResponseEntity<List<noticeDto>> getNotice() throws IOException {
+        List<noticeDto> notices = Crawler.getNotice();
+        return new ResponseEntity(notices, HttpStatus.OK);
+    }
 }
 
-
-//    @Operation(summary = "회원 탈퇴 요청", description = "회원 정보가 삭제됩니다.", tags = { "Member Controller" })
-//    @ApiResponses({
-//            @ApiResponse(responseCode = "200", description = "OK",
-//                    content = @Content(schema = @Schema(implementation = DeleteMemberResponse.class))),
-//            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
-//            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
-//            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-//    })
-//    @DeleteMapping("/v1/member/{id}")
-//    ResponseEntity<DeleteMemberResponse> deleteMember(
-//            @Parameter(description = "회원 ID", required = true, example = "1") @PathVariable("id") Long id) {
-//        // 생략..
-//    }
-//}

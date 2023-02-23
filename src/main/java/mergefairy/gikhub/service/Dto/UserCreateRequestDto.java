@@ -10,7 +10,7 @@ import mergefairy.gikhub.domain.User;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserCreateDto {
+public class UserCreateRequestDto {
     @NotBlank(message = "아이디는 필수 입력 값입니다.")
     @Email(message = "유효하지 않는 이메일 형식입니다.")
     private String email;
