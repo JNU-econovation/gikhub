@@ -24,20 +24,6 @@
 |------|---|---|---|
 |![토크토크](https://github.com/JNU-econovation/gikhub/assets/102847513/871d9103-bc88-4e0d-83ed-c4bae01ced6d)|![토크토크-글작성](https://github.com/JNU-econovation/gikhub/assets/102847513/94eee587-165a-4ea1-9eb2-04e9af63728c)|![토크토크-글확인](https://github.com/JNU-econovation/gikhub/assets/102847513/82e5a20e-4851-493b-b5e9-8931a018c816)|![토크토크-1](https://github.com/JNU-econovation/gikhub/assets/102847513/96ec0e60-e605-4689-adc4-77b810a6f2b8)
 |✅ 게시글 CRUD <br> ✅ 게시판 정렬 (댓글 순, 최신 순)| |✅ 댓글|✅ 기존 생활관 공지사항을 <br> 크롤링으로 게시판 구현|
-## Stack
-### 백엔드
 
-- JAVA
-- Spring Boot
-- Spring Data JPA
-- H2
-- Jsoup
-
-### 프론트엔드
-
-- Kotlin
-- Android Studio
-
-### 통신
-
-- 레트로핏
+## 아키텍처 구성도
+<img src = https://github.com/JNU-econovation/gikhub/assets/102847513/403b9289-13d3-4081-a879-738ff1458686 width = 80%>
